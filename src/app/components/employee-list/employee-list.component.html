@@ -1,0 +1,56 @@
+<!-- src/app/components/employee-list/employee-list.component.html  (input)="onInputChange($event)" $event.target.filterValue -->
+
+<div class="container">
+    <input type="text" [(ngModel)]="filterValue"  (input)="applyFilter()" placeholder="Search..." >
+    
+      
+    <button (click)="clearFilter()">Clear</button>
+
+    <button (click)="showAddForm = !showAddForm">Add Employee</button>
+    
+    <p-table
+    [value]="filteredEmployees "
+    [paginator]="true"
+    [rows]="10"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [rowsPerPageOptions]="[10, 20, 50]"
+>
+    <ng-template pTemplate="header">
+        <tr>
+          <th (click)="sortTableByColumn('age')"> Age </th>
+          <th (click)="sortTableByColumn('dob')"> dob </th>
+          <th (click)="sortTableByColumn('email')"> email </th>
+          <th (click)="sortTableByColumn('salary')"> salary </th>
+          <th (click)="sortTableByColumn('address')"> address </th>
+          <th (click)="sortTableByColumn('imageUrl')"> imageUrl </th>
+          <th (click)="sortTableByColumn('lastName')"> lastName </th>
+          <th (click)="sortTableByColumn('firstName')"> firstName</th>
+          <th (click)="sortTableByColumn('contactNumber')"> contactNumber </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-employee>
+        <tr>
+            <td>{{ employee.age }}</td>
+          <!-- {{ employee.dob ?  (employee.dob | date) : '' }} -->
+          <td>{{ isValidDate(employee.dob) ? (employee.dob | date) : 'Date invalide'}}</td>
+          
+          <td>{{ employee.email }}</td>
+          <td>{{ employee.salary }}</td>
+          <td>{{ employee.address }}</td>
+          <td>{{ employee.imageUrl }}</td>
+          <td>{{ employee.lastName }}</td>
+          <td>{{ employee.firstName }}</td>
+          <td>{{ employee.contactNumber }}</td>
+          <td>
+            <button (click)="deleteEmployee(employee.id)">Delete</button>
+          </td>
+        </tr>
+    </ng-template>
+</p-table>
+  </div>
+
+  <div *ngIf="showAddForm" >
+    <app-employee-form (closedModal)="hideModal()" (addEmployee)="refreshList($event)" [showDialog]="showAddForm" ></app-employee-form>
+  </div>
+
+  
